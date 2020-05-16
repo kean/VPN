@@ -43,6 +43,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C3C1B5D24702E1C00571084 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0C405BE92466FBFE00EB0786 /* vpn-client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vpn-client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C405BEC2466FBFE00EB0786 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0C405BEE2466FBFE00EB0786 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +80,7 @@
 		0C405BE02466FBFE00EB0786 = {
 			isa = PBXGroup;
 			children = (
+				0C3C1B5D24702E1C00571084 /* README.md */,
 				0C405BEB2466FBFE00EB0786 /* vpn-client */,
 				0CAE93DB246F4927007B2E95 /* vpn-tunnel */,
 				0C405BEA2466FBFE00EB0786 /* Products */,
@@ -184,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "VPN" */;
+			buildConfigurationList = 0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "vpn" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -388,7 +390,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"vpn-client/Preview Content\"";
 				DEVELOPMENT_TEAM = NR8DLKJ7E6;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "vpn-clientt/Info.plist";
+				INFOPLIST_FILE = "vpn-client/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -409,7 +411,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"vpn-client/Preview Content\"";
 				DEVELOPMENT_TEAM = NR8DLKJ7E6;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "vpn-clientt/Info.plist";
+				INFOPLIST_FILE = "vpn-client/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -464,7 +466,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "VPN" */ = {
+		0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "vpn" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0C405BFB2466FC0100EB0786 /* Debug */,
