@@ -19,8 +19,6 @@ final class VPNConfigurationService: ObservableObject {
     }
 
     func refresh(_ completion: @escaping (Result<Void, Error>) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-
         // Read all of the VPN configurations created by the app that have
         // previously been saved to the Network Extension preferences.
         NETunnelProviderManager.loadAllFromPreferences { [weak self] managers, error in
@@ -35,12 +33,6 @@ final class VPNConfigurationService: ObservableObject {
                 completion(.success(()))
             }
         }
-        }
-    }
-
-    func startTunnel() throws {
-        assert(tunnel != nil, "Tunnel is missing")
-        try tunnel?.connection.startVPNTunnel()
     }
 
     func installProfile(_ completion: @escaping (Result<Void, Error>) -> Void) {
@@ -80,5 +72,21 @@ final class VPNConfigurationService: ObservableObject {
         manager.isEnabled = true
 
         return manager
+    }
+
+    func startTunnel() throws {
+        assert(tunnel != nil, "Tunnel is missing")
+        try tunnel?.connection.startVPNTunnel()
+    }
+
+    func removeProfile(_ completion: @escaping (Result<Void, Error>) -> Void) {
+        assert(tunnel != nil, "Tunnel is missing")
+        tunnel?.removeFromPreferences { error in
+            if let error = error {
+                return completion(.failure(error))
+            }
+            self.tunnel = nil
+            completion(.success(()))
+        }
     }
 }

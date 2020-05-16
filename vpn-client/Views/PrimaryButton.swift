@@ -17,6 +17,7 @@ struct PrimaryButton: View {
                     .opacity(isLoading ? 0 : 1)
             }
         }
+            .disabled(isLoading)
             .padding()
             .frame(maxWidth: .infinity)
             .foregroundColor(Color.white)
