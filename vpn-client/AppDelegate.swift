@@ -1,10 +1,6 @@
+// The MIT License (MIT)
 //
-//  AppDelegate.swift
-//  VPNClient
-//
-//  Created by Alexander Grebenyuk on 09.05.2020.
-//  Copyright © 2020 kean. All rights reserved.
-//
+// Copyright (c) 2020 Alexander Grebenyuk (github.com/kean).
 
 import UIKit
 

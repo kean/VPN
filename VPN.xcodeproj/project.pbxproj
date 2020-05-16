@@ -13,10 +13,37 @@
 		0C405BF32466FC0000EB0786 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C405BF22466FC0000EB0786 /* Assets.xcassets */; };
 		0C405BF62466FC0000EB0786 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C405BF52466FC0000EB0786 /* Preview Assets.xcassets */; };
 		0C405BF92466FC0000EB0786 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C405BF72466FC0000EB0786 /* LaunchScreen.storyboard */; };
+		0CAE93DD246F4927007B2E95 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */; };
+		0CAE93E2246F4927007B2E95 /* vpn-tunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE940624702557007B2E95 /* WelcomeView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0CAE93E0246F4927007B2E95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0C405BE12466FBFE00EB0786 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0CAE93D9246F4927007B2E95;
+			remoteInfo = "vpn-tunnel";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0CAE93D5246F4906007B2E95 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0CAE93E2246F4927007B2E95 /* vpn-tunnel.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		0C405BE92466FBFE00EB0786 /* VPNClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VPNClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C405BE92466FBFE00EB0786 /* vpn-client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vpn-client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C405BEC2466FBFE00EB0786 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0C405BEE2466FBFE00EB0786 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0C405BF02466FBFE00EB0786 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -24,10 +51,22 @@
 		0C405BF52466FC0000EB0786 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0C405BF82466FC0000EB0786 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0C405BFA2466FC0000EB0786 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vpn-tunnel.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
+		0CAE93DE246F4927007B2E95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0CAE93DF246F4927007B2E95 /* vpn_tunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vpn_tunnel.entitlements; sourceTree = "<group>"; };
+		0CAE940624702557007B2E95 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		0C405BE62466FBFE00EB0786 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0CAE93D7246F4927007B2E95 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -40,7 +79,8 @@
 		0C405BE02466FBFE00EB0786 = {
 			isa = PBXGroup;
 			children = (
-				0C405BEB2466FBFE00EB0786 /* VPNClient */,
+				0C405BEB2466FBFE00EB0786 /* vpn-client */,
+				0CAE93DB246F4927007B2E95 /* vpn-tunnel */,
 				0C405BEA2466FBFE00EB0786 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,23 +88,25 @@
 		0C405BEA2466FBFE00EB0786 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0C405BE92466FBFE00EB0786 /* VPNClient.app */,
+				0C405BE92466FBFE00EB0786 /* vpn-client.app */,
+				0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0C405BEB2466FBFE00EB0786 /* VPNClient */ = {
+		0C405BEB2466FBFE00EB0786 /* vpn-client */ = {
 			isa = PBXGroup;
 			children = (
 				0C405BEC2466FBFE00EB0786 /* AppDelegate.swift */,
 				0C405BEE2466FBFE00EB0786 /* SceneDelegate.swift */,
+				0CAE940624702557007B2E95 /* WelcomeView.swift */,
 				0C405BF02466FBFE00EB0786 /* ContentView.swift */,
 				0C405BF22466FC0000EB0786 /* Assets.xcassets */,
 				0C405BF72466FC0000EB0786 /* LaunchScreen.storyboard */,
 				0C405BFA2466FC0000EB0786 /* Info.plist */,
 				0C405BF42466FC0000EB0786 /* Preview Content */,
 			);
-			path = VPNClient;
+			path = "vpn-client";
 			sourceTree = "<group>";
 		};
 		0C405BF42466FC0000EB0786 /* Preview Content */ = {
@@ -75,25 +117,54 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		0CAE93DB246F4927007B2E95 /* vpn-tunnel */ = {
+			isa = PBXGroup;
+			children = (
+				0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */,
+				0CAE93DE246F4927007B2E95 /* Info.plist */,
+				0CAE93DF246F4927007B2E95 /* vpn_tunnel.entitlements */,
+			);
+			path = "vpn-tunnel";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0C405BE82466FBFE00EB0786 /* VPNClient */ = {
+		0C405BE82466FBFE00EB0786 /* vpn-client */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C405BFD2466FC0100EB0786 /* Build configuration list for PBXNativeTarget "VPNClient" */;
+			buildConfigurationList = 0C405BFD2466FC0100EB0786 /* Build configuration list for PBXNativeTarget "vpn-client" */;
 			buildPhases = (
 				0C405BE52466FBFE00EB0786 /* Sources */,
 				0C405BE62466FBFE00EB0786 /* Frameworks */,
 				0C405BE72466FBFE00EB0786 /* Resources */,
+				0CAE93D5246F4906007B2E95 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0CAE93E1246F4927007B2E95 /* PBXTargetDependency */,
+			);
+			name = "vpn-client";
+			productName = VPNClient;
+			productReference = 0C405BE92466FBFE00EB0786 /* vpn-client.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0CAE93D9246F4927007B2E95 /* vpn-tunnel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0CAE93E3246F4927007B2E95 /* Build configuration list for PBXNativeTarget "vpn-tunnel" */;
+			buildPhases = (
+				0CAE93D6246F4927007B2E95 /* Sources */,
+				0CAE93D7246F4927007B2E95 /* Frameworks */,
+				0CAE93D8246F4927007B2E95 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = VPNClient;
-			productName = VPNClient;
-			productReference = 0C405BE92466FBFE00EB0786 /* VPNClient.app */;
-			productType = "com.apple.product-type.application";
+			name = "vpn-tunnel";
+			productName = "vpn-tunnel";
+			productReference = 0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -108,9 +179,12 @@
 					0C405BE82466FBFE00EB0786 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
+					0CAE93D9246F4927007B2E95 = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
 				};
 			};
-			buildConfigurationList = 0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "VPNClient" */;
+			buildConfigurationList = 0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "VPN" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -123,7 +197,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0C405BE82466FBFE00EB0786 /* VPNClient */,
+				0C405BE82466FBFE00EB0786 /* vpn-client */,
+				0CAE93D9246F4927007B2E95 /* vpn-tunnel */,
 			);
 		};
 /* End PBXProject section */
@@ -139,6 +214,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0CAE93D8246F4927007B2E95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -149,10 +231,27 @@
 				0C405BED2466FBFE00EB0786 /* AppDelegate.swift in Sources */,
 				0C405BEF2466FBFE00EB0786 /* SceneDelegate.swift in Sources */,
 				0C405BF12466FBFE00EB0786 /* ContentView.swift in Sources */,
+				0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0CAE93D6246F4927007B2E95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CAE93DD246F4927007B2E95 /* PacketTunnelProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0CAE93E1246F4927007B2E95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0CAE93D9246F4927007B2E95 /* vpn-tunnel */;
+			targetProxy = 0CAE93E0246F4927007B2E95 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0C405BF72466FC0000EB0786 /* LaunchScreen.storyboard */ = {
@@ -283,16 +382,18 @@
 		0C405BFE2466FC0100EB0786 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"VPNClient/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"vpn-client/Preview Content\"";
+				DEVELOPMENT_TEAM = NR8DLKJ7E6;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = VPNClient/Info.plist;
+				INFOPLIST_FILE = "vpn-clientt/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.kean.VPNClient;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.vpn-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -302,17 +403,59 @@
 		0C405BFF2466FC0100EB0786 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"VPNClient/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"vpn-client/Preview Content\"";
+				DEVELOPMENT_TEAM = NR8DLKJ7E6;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = VPNClient/Info.plist;
+				INFOPLIST_FILE = "vpn-clientt/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.kean.VPNClient;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.vpn-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0CAE93E4246F4927007B2E95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "vpn-tunnel/vpn_tunnel.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NR8DLKJ7E6;
+				INFOPLIST_FILE = "vpn-tunnel/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.vpn-client.vpn-tunnel";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0CAE93E5246F4927007B2E95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "vpn-tunnel/vpn_tunnel.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NR8DLKJ7E6;
+				INFOPLIST_FILE = "vpn-tunnel/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.vpn-client.vpn-tunnel";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -321,7 +464,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "VPNClient" */ = {
+		0C405BE42466FBFE00EB0786 /* Build configuration list for PBXProject "VPN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0C405BFB2466FC0100EB0786 /* Debug */,
@@ -330,11 +473,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0C405BFD2466FC0100EB0786 /* Build configuration list for PBXNativeTarget "VPNClient" */ = {
+		0C405BFD2466FC0100EB0786 /* Build configuration list for PBXNativeTarget "vpn-client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0C405BFE2466FC0100EB0786 /* Debug */,
 				0C405BFF2466FC0100EB0786 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0CAE93E3246F4927007B2E95 /* Build configuration list for PBXNativeTarget "vpn-tunnel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0CAE93E4246F4927007B2E95 /* Debug */,
+				0CAE93E5246F4927007B2E95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
