@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C3C1B5F247039EB00571084 /* VPNConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B5E247039EB00571084 /* VPNConfigurationService.swift */; };
-		0C3C1B6124703B5E00571084 /* TunnelStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B6024703B5E00571084 /* TunnelStatusView.swift */; };
+		0C3C1B6124703B5E00571084 /* TunnelDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */; };
 		0C3C1B6524703D8600571084 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B6424703D8600571084 /* PrimaryButton.swift */; };
 		0C3C1B692470404A00571084 /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B682470404A00571084 /* Spinner.swift */; };
 		0C405BED2466FBFE00EB0786 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C405BEC2466FBFE00EB0786 /* AppDelegate.swift */; };
@@ -51,7 +51,7 @@
 /* Begin PBXFileReference section */
 		0C3C1B5D24702E1C00571084 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0C3C1B5E247039EB00571084 /* VPNConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfigurationService.swift; sourceTree = "<group>"; };
-		0C3C1B6024703B5E00571084 /* TunnelStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelStatusView.swift; sourceTree = "<group>"; };
+		0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelDetailsView.swift; sourceTree = "<group>"; };
 		0C3C1B6424703D8600571084 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		0C3C1B682470404A00571084 /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
 		0C405BE92466FBFE00EB0786 /* vpn-client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vpn-client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,7 +96,7 @@
 			children = (
 				0CAE940624702557007B2E95 /* WelcomeView.swift */,
 				0C405BF02466FBFE00EB0786 /* RouterView.swift */,
-				0C3C1B6024703B5E00571084 /* TunnelStatusView.swift */,
+				0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */,
 				0C3C1B6424703D8600571084 /* PrimaryButton.swift */,
 				0C3C1B682470404A00571084 /* Spinner.swift */,
 				0C571CBB24705809006B2931 /* SplashView.swift */,
@@ -277,7 +277,7 @@
 			files = (
 				0C405BED2466FBFE00EB0786 /* AppDelegate.swift in Sources */,
 				0C405BEF2466FBFE00EB0786 /* SceneDelegate.swift in Sources */,
-				0C3C1B6124703B5E00571084 /* TunnelStatusView.swift in Sources */,
+				0C3C1B6124703B5E00571084 /* TunnelDetailsView.swift in Sources */,
 				0C3C1B5F247039EB00571084 /* VPNConfigurationService.swift in Sources */,
 				0C405BF12466FBFE00EB0786 /* RouterView.swift in Sources */,
 				0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */,

@@ -6,16 +6,21 @@ import SwiftUI
 import Combine
 import NetworkExtension
 
-struct TunnelStatusView: View {
+struct TunnelDetailsView: View {
     @ObservedObject var model: TunnelViewModel
+
+    @State var login = ""
+    @State var password = ""
 
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    Text("Status: ") + Text(model.status).bold()
+                Section(header: Text("Credentials")) {
+                    TextField("Login", text: $login)
+                    TextField("Password", text: $login)
                 }
-                Section {
+                Section(header: Text("Status")) {
+                    Text("Status: ") + Text(model.status).bold()
                     Toggle(isOn: $model.isEnabled, label: { Text("Enabled") })
                     if model.isEnabled {
                         if model.isStarted {
@@ -185,6 +190,6 @@ final class TunnelViewModel: ObservableObject {
 
 struct TunnelView_Previews: PreviewProvider {
     static var previews: some View {
-        TunnelStatusView(model: .init(tunnel: .init()))
+        TunnelDetailsView(model: .init(tunnel: .init()))
     }
 }

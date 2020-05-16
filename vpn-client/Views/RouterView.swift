@@ -12,7 +12,7 @@ struct RouterView: View {
             return AnyView(SplashView())
         } else {
             if let tunnel = service.tunnel {
-                return AnyView(TunnelStatusView(model: TunnelViewModel(tunnel: tunnel)))
+                return AnyView(TunnelDetailsView(model: TunnelViewModel(tunnel: tunnel)))
             } else {
                 return AnyView(WelcomeView())
             }
