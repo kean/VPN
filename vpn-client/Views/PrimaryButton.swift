@@ -12,7 +12,7 @@ struct PrimaryButton: View {
     var body: some View {
         Button(action: self.action) {
             ZStack {
-                Spinner(isAnimating: $isLoading, style: .medium)
+                Spinner(isAnimating: $isLoading, color: .white, style: .medium)
                 Text(title)
                     .opacity(isLoading ? 0 : 1)
             }

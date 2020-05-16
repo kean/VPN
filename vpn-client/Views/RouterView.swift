@@ -8,10 +8,14 @@ struct RouterView: View {
     @ObservedObject var service: VPNConfigurationService = .shared
 
     var body: some View {
-        if let tunnel = service.tunnel {
-            return AnyView(TunnelView(tunnel: tunnel))
+        if !service.isStarted {
+            return AnyView(SplashView())
         } else {
-            return AnyView(WelcomeView())
+            if let tunnel = service.tunnel {
+                return AnyView(TunnelView(tunnel: tunnel))
+            } else {
+                return AnyView(WelcomeView())
+            }
         }
     }
 }

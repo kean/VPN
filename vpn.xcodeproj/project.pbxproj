@@ -18,6 +18,7 @@
 		0C405BF62466FC0000EB0786 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C405BF52466FC0000EB0786 /* Preview Assets.xcassets */; };
 		0C405BF92466FC0000EB0786 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C405BF72466FC0000EB0786 /* LaunchScreen.storyboard */; };
 		0C571CBA247050E5006B2931 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C571CB9247050E5006B2931 /* NetworkExtension.framework */; };
+		0C571CBC24705809006B2931 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C571CBB24705809006B2931 /* SplashView.swift */; };
 		0CAE93DD246F4927007B2E95 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */; };
 		0CAE93E2246F4927007B2E95 /* vpn-tunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE940624702557007B2E95 /* WelcomeView.swift */; };
@@ -63,6 +64,7 @@
 		0C405BFA2466FC0000EB0786 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0C571CB7247050E5006B2931 /* vpn-client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "vpn-client.entitlements"; sourceTree = "<group>"; };
 		0C571CB9247050E5006B2931 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		0C571CBB24705809006B2931 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vpn-tunnel.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
 		0CAE93DE246F4927007B2E95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				0C3C1B6024703B5E00571084 /* TunnelView.swift */,
 				0C3C1B6424703D8600571084 /* PrimaryButton.swift */,
 				0C3C1B682470404A00571084 /* Spinner.swift */,
+				0C571CBB24705809006B2931 /* SplashView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */,
 				0C3C1B6524703D8600571084 /* PrimaryButton.swift in Sources */,
 				0C3C1B692470404A00571084 /* Spinner.swift in Sources */,
+				0C571CBC24705809006B2931 /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

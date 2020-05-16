@@ -7,6 +7,8 @@ import Combine
 import NetworkExtension
 
 final class VPNConfigurationService: ObservableObject {
+    @Published private(set) var isStarted = false
+
     /// If not nil, the tunnel is displayed.
     @Published private(set) var tunnel: NETunnelProviderManager?
 
@@ -17,6 +19,8 @@ final class VPNConfigurationService: ObservableObject {
     }
 
     func refresh(_ completion: @escaping (Result<Void, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+
         // Read all of the VPN configurations created by the app that have
         // previously been saved to the Network Extension preferences.
         NETunnelProviderManager.loadAllFromPreferences { [weak self] managers, error in
@@ -27,8 +31,10 @@ final class VPNConfigurationService: ObservableObject {
             if let error = error {
                 completion(.failure(error))
             } else {
+                self.isStarted = true
                 completion(.success(()))
             }
+        }
         }
     }
 
