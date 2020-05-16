@@ -14,9 +14,7 @@ final class VPNConfigurationService: ObservableObject {
 
     static let shared = VPNConfigurationService()
 
-    private init() {
-        
-    }
+    private init() {}
 
     func refresh(_ completion: @escaping (Result<Void, Error>) -> Void) {
         // Read all of the VPN configurations created by the app that have
@@ -74,6 +72,10 @@ final class VPNConfigurationService: ObservableObject {
         return manager
     }
 
+    private func statusUpdated() {
+
+    }
+
     func startTunnel() throws {
         assert(tunnel != nil, "Tunnel is missing")
         try tunnel?.connection.startVPNTunnel()
@@ -87,6 +89,23 @@ final class VPNConfigurationService: ObservableObject {
             }
             self.tunnel = nil
             completion(.success(()))
+        }
+    }
+}
+
+// MARK: - Extensions
+
+/// Make NEVPNStatus convertible to a string
+extension NEVPNStatus: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .disconnected: return "Disconnected"
+        case .invalid: return "Invalid"
+        case .connected: return "Connected"
+        case .connecting: return "Connecting"
+        case .disconnecting: return "Disconnecting"
+        case .reasserting: return "Reconnecting"
+        @unknown default: return "Unknown"
         }
     }
 }
