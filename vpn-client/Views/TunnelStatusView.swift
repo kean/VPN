@@ -104,6 +104,8 @@ final class TunnelViewModel: ObservableObject {
         $isEnabled.sink { [weak self] in
             self?.setEnabled($0)
         }.store(in: &bag)
+
+        self.sayHelloToTunnel()
     }
 
     private func refresh() {
@@ -157,6 +159,27 @@ final class TunnelViewModel: ObservableObject {
         self.errorTitle = title
         self.errorMessage = message
         self.isShowingError = true
+    }
+
+    private func sayHelloToTunnel() {
+        // Send a simple IPC message to the provider, handle the response.
+        guard let session = tunnel.connection as? NETunnelProviderSession,
+            let message = "Hello Provider".data(using: String.Encoding.utf8), tunnel.connection.status != .invalid else {
+                return
+        }
+
+        do {
+            try session.sendProviderMessage(message) { response in
+                if response != nil {
+                    let responseString = NSString(data: response!, encoding: String.Encoding.utf8.rawValue)
+                    NSLog("Received response from the provider: \(String(describing: responseString))")
+                } else {
+                    NSLog("Got a nil response from the provider")
+                }
+            }
+        } catch {
+            NSLog("Failed to send a message to the provider")
+        }
     }
 }
 
