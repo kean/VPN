@@ -5,6 +5,7 @@
 import Foundation
 import Combine
 import NetworkExtension
+import UIKit
 
 final class VPNConfigurationService: ObservableObject {
     @Published private(set) var isStarted = false
@@ -17,7 +18,15 @@ final class VPNConfigurationService: ObservableObject {
     private var observer: AnyObject?
 
     private init() {
-        
+        observer = NotificationCenter.default.addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil, queue: .main) { [weak self] _ in
+                self?.refresh()
+        }
+    }
+
+    private func refresh() {
+        refresh { _ in }
     }
 
     func refresh(_ completion: @escaping (Result<Void, Error>) -> Void) {
