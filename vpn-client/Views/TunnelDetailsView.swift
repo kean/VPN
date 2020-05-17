@@ -20,9 +20,9 @@ struct TunnelDetailsView: View {
                     TextField("Password", text: $login)
                 }
                 Section(header: Text("Status")) {
-                    Text("Status: ") + Text(model.status).bold()
                     Toggle(isOn: $model.isEnabled, label: { Text("Enabled") })
                     if model.isEnabled {
+                        Text("Status: ") + Text(model.status).bold()
                         if model.isStarted {
                             Button(action: model.buttonStopTapped) { Text("Stop") }
                                 .foregroundColor(Color.orange)
@@ -91,7 +91,7 @@ final class TunnelViewModel: ObservableObject {
     private let service: VPNConfigurationService
     private let tunnel: NETunnelProviderManager
 
-    private var observer: AnyObject?
+    private var observers = [AnyObject]()
     private var bag = [AnyCancellable]()
 
     init(service: VPNConfigurationService = .shared, tunnel: NETunnelProviderManager) {
@@ -100,17 +100,19 @@ final class TunnelViewModel: ObservableObject {
 
         self.refresh()
 
-        // Register to be notified of changes in the tunnel status.
-        observer = NotificationCenter.default
-            .addObserver(forName: .NEVPNStatusDidChange, object: tunnel.connection, queue: OperationQueue.main) { [weak self] _ in
+        observers.append(NotificationCenter.default
+            .addObserver(forName: .NEVPNStatusDidChange, object: tunnel.connection, queue: .main) { [weak self] _ in
                 self?.refresh()
-        }
+        })
+
+        observers.append(NotificationCenter.default
+            .addObserver(forName: .NEVPNConfigurationChange, object: tunnel, queue: .main) { [weak self] _ in
+                self?.refresh()
+        })
 
         $isEnabled.sink { [weak self] in
             self?.setEnabled($0)
         }.store(in: &bag)
-
-        self.sayHelloToTunnel()
     }
 
     private func refresh() {
@@ -121,6 +123,7 @@ final class TunnelViewModel: ObservableObject {
 
     private func setEnabled(_ isEnabled: Bool) {
         tunnel.isEnabled = isEnabled
+        guard isEnabled != tunnel.isEnabled else { return }
         isLoading = true
         tunnel.saveToPreferences { [weak self] error in
             guard let self = self else { return }
@@ -135,7 +138,11 @@ final class TunnelViewModel: ObservableObject {
 
     func buttonStartTapped() {
         do {
-            try tunnel.connection.startVPNTunnel()
+            try tunnel.connection.startVPNTunnel(options: [
+                // Don't share with anyone!
+                NEVPNConnectionStartOptionUsername: "kean",
+                NEVPNConnectionStartOptionPassword: "password"
+            ] as [String : NSObject])
         } catch {
             self.showError(title: "Failed to start VPN tunnel", message: error.localizedDescription)
         }

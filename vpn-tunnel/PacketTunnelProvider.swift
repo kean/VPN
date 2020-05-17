@@ -7,7 +7,13 @@ import NetworkExtension
 class PacketTunnelProvider: NEPacketTunnelProvider {
 
     override func startTunnel(options: [String : NSObject]?, completionHandler: @escaping (Error?) -> Void) {
+        NSLog("Starting tunnel with options: \(options ?? [:])")
         // Add code here to start the process of connecting the tunnel.
+
+        let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "127.0.0.1")  
+        setTunnelNetworkSettings(settings) { error in
+            completionHandler(error)
+        }
     }
     
     override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {

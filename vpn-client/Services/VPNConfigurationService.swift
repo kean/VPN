@@ -14,7 +14,11 @@ final class VPNConfigurationService: ObservableObject {
 
     static let shared = VPNConfigurationService()
 
-    private init() {}
+    private var observer: AnyObject?
+
+    private init() {
+        
+    }
 
     func refresh(_ completion: @escaping (Result<Void, Error>) -> Void) {
         // Read all of the VPN configurations created by the app that have
@@ -50,23 +54,27 @@ final class VPNConfigurationService: ObservableObject {
 
     private func makeManager() -> NETunnelProviderManager {
         let manager = NETunnelProviderManager()
-
         manager.localizedDescription = "BestVPN"
 
-        manager.protocolConfiguration = {
-            let configuration = NETunnelProviderProtocol()
-            configuration.providerBundleIdentifier = "com.github.kean.vpn-client.vpn-tunnel"
-            #warning("TODO: configure with your VPN address")
-            configuration.serverAddress = "127.0.0.1/4009"
-            return configuration
-        }()
+        let proto = NETunnelProviderProtocol()
+        // TODO: Set the bundle identifier of the Packet Tunnel Provider
+        // App Extension
+        proto.providerBundleIdentifier = "com.github.kean.vpn-client.vpn-tunnel"
+        // TODO: Set an actual VPN server address, in the sample project
+        // we are going to deploy the service locally.
+        proto.serverAddress = "127.0.0.1:4009"
+        proto.providerConfiguration = ["user":"kean"]
+
+        manager.protocolConfiguration = proto
 
         // Make sure that VPN connects automatically.
-        manager.isOnDemandEnabled = true
-        let rule = NEOnDemandRuleConnect()
-        rule.interfaceTypeMatch = .any
-        manager.onDemandRules = [rule]
+        #warning("TEMP:")
+//        let onDemandRule = NEOnDemandRuleConnect()
+//        onDemandRule.interfaceTypeMatch = .any
+//        manager.isOnDemandEnabled = true
+//        manager.onDemandRules = [onDemandRule]
 
+        // Enable the manager bu default.
         manager.isEnabled = true
 
         return manager
@@ -75,12 +83,7 @@ final class VPNConfigurationService: ObservableObject {
     private func statusUpdated() {
 
     }
-
-    func startTunnel() throws {
-        assert(tunnel != nil, "Tunnel is missing")
-        try tunnel?.connection.startVPNTunnel()
-    }
-
+    
     func removeProfile(_ completion: @escaping (Result<Void, Error>) -> Void) {
         assert(tunnel != nil, "Tunnel is missing")
         tunnel?.removeFromPreferences { error in
