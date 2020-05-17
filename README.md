@@ -1,4 +1,4 @@
-# VPN
+# VPN (WIP)
 
 A sample VPN client/server written in Swift.
 
