@@ -138,10 +138,10 @@ final class TunnelViewModel: ObservableObject {
 
     func buttonStartTapped() {
         do {
-            try tunnel.connection.startVPNTunnel(options: [
+            try tunnel.connection.startVPNTunnel(options: [:
                 // Don't share with anyone!
-                NEVPNConnectionStartOptionUsername: "kean",
-                NEVPNConnectionStartOptionPassword: "password"
+//                NEVPNConnectionStartOptionUsername: "kean",
+//                NEVPNConnectionStartOptionPassword: "password"
             ] as [String : NSObject])
         } catch {
             self.showError(title: "Failed to start VPN tunnel", message: error.localizedDescription)

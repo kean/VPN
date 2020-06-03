@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,7 @@
 		0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE940624702557007B2E95 /* WelcomeView.swift */; };
 		0CD38AFC2486C12E00DB2626 /* Packet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD38AFB2486C12E00DB2626 /* Packet.swift */; };
 		0CD38B012486CD6E00DB2626 /* Tunnel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD38B002486CD6E00DB2626 /* Tunnel.swift */; };
+		0CD38B06248735A700DB2626 /* NIO in Frameworks */ = {isa = PBXBuildFile; productRef = 0CD38B05248735A700DB2626 /* NIO */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CD38B06248735A700DB2626 /* NIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +257,9 @@
 			dependencies = (
 			);
 			name = "vpn-server";
+			packageProductDependencies = (
+				0CD38B05248735A700DB2626 /* NIO */,
+			);
 			productName = "vpn-server";
 			productReference = 0C189C412479D280000EE6B3 /* vpn-server */;
 			productType = "com.apple.product-type.tool";
@@ -345,6 +350,9 @@
 				Base,
 			);
 			mainGroup = 0C405BE02466FBFE00EB0786;
+			packageReferences = (
+				0CD38B04248735A700DB2626 /* XCRemoteSwiftPackageReference "swift-nio" */,
+			);
 			productRefGroup = 0C405BEA2466FBFE00EB0786 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -738,6 +746,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0CD38B04248735A700DB2626 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.17.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0CD38B05248735A700DB2626 /* NIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0CD38B04248735A700DB2626 /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIO;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0C405BE12466FBFE00EB0786 /* Project object */;
 }

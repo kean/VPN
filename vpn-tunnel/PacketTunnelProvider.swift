@@ -6,17 +6,43 @@ import NetworkExtension
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
 
+    private var session: NWUDPSession?
+    private var observer: AnyObject?
+    private let queue = DispatchQueue(label: "test")
+
     override func startTunnel(options: [String : NSObject]?, completionHandler: @escaping (Error?) -> Void) {
         NSLog("Starting tunnel with options: \(options ?? [:])")
         // Add code here to start the process of connecting the tunnel.
 
-        let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "127.0.0.1")  
-        setTunnelNetworkSettings(settings) { error in
-            completionHandler(error)
+        #warning("TEMP:")
+
+        let endpoint = NWHostEndpoint(hostname: "192.168.0.13", port: "9999")
+        let session = createUDPSession(to: endpoint, from: nil)
+        self.session = session
+        observer = session.observe(\.state, options: [.new]) { (session, change) in
+            self.queue.async {
+                NSLog("state updated: \(change)")
+                NSLog("state: \(session.state)")
+
+                if session.state == .ready {
+                    session.setReadHandler({ (data, error) in
+                        print("received: ", data, error)
+                    }, maxDatagrams: Int.max)
+                    let data = "hello".data(using: .utf8)!
+                    session.writeDatagram(data) { (error) in
+                        print("sent: ", error)
+                    }
+                }
+            }
         }
+
+//        let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "192.168.0.14")  
+//        setTunnelNetworkSettings(settings) { error in
+//            completionHandler(error)
+//        }
     }
 
-    private func startTunnel() -> throws {
+    private func startTunnel() throws {
         guard let tunnelProtocol = protocolConfiguration as? NETunnelProviderProtocol else {
             throw TunnelError.parameterMissing("protocolConfiguration")
         }

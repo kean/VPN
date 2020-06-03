@@ -6,7 +6,9 @@ import Foundation
 import NetworkExtension
 
 final class Tunnel {
-    init(flow: NEPacketTunnelFlow)
+    init(flow: NEPacketTunnelFlow) {
+        
+    }
 }
 
 enum TunnelError: Swift.Error {
