@@ -15,6 +15,20 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             completionHandler(error)
         }
     }
+
+    private func startTunnel() -> throws {
+        guard let tunnelProtocol = protocolConfiguration as? NETunnelProviderProtocol else {
+            throw TunnelError.parameterMissing("protocolConfiguration")
+        }
+        guard let serverAddress = tunnelProtocol.serverAddress else {
+            throw TunnelError.parameterMissing("protocolConfiguration.serverAddress")
+        }
+        guard let providerConfiguration = tunnelProtocol.providerConfiguration else {
+            throw TunnelError.parameterMissing("protocolConfiguration.providerConfiguration")
+        }
+
+        #warning("TODO: read login/password")
+    }
     
     override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {
         // Add code here to start the process of stopping the tunnel.

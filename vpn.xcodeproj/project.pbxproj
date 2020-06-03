@@ -25,6 +25,7 @@
 		0CAE93E2246F4927007B2E95 /* vpn-tunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE940624702557007B2E95 /* WelcomeView.swift */; };
 		0CD38AFC2486C12E00DB2626 /* Packet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD38AFB2486C12E00DB2626 /* Packet.swift */; };
+		0CD38B012486CD6E00DB2626 /* Tunnel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD38B002486CD6E00DB2626 /* Tunnel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		0CAE940624702557007B2E95 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		0CD38AF92486C12E00DB2626 /* libvpn-protocol.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libvpn-protocol.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CD38AFB2486C12E00DB2626 /* Packet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packet.swift; sourceTree = "<group>"; };
+		0CD38B002486CD6E00DB2626 /* Tunnel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tunnel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */,
+				0CD38B002486CD6E00DB2626 /* Tunnel.swift */,
 				0CAE93DE246F4927007B2E95 /* Info.plist */,
 				0CAE93DF246F4927007B2E95 /* vpn_tunnel.entitlements */,
 			);
@@ -404,6 +407,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CAE93DD246F4927007B2E95 /* PacketTunnelProvider.swift in Sources */,
+				0CD38B012486CD6E00DB2626 /* Tunnel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
