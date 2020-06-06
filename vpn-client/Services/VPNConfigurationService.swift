@@ -76,12 +76,12 @@ final class VPNConfigurationService: ObservableObject {
 
         manager.protocolConfiguration = proto
 
-        // Make sure that VPN connects automatically.
-        #warning("TEMP:")
-    //        let onDemandRule = NEOnDemandRuleConnect()
-    //        onDemandRule.interfaceTypeMatch = .any
-    //        manager.isOnDemandEnabled = true
-    //        manager.onDemandRules = [onDemandRule]
+        // Uncomment this to configure on-demand rules to make sure the tunnel
+        // starts automatically when needed.
+//        let onDemandRule = NEOnDemandRuleConnect()
+//        onDemandRule.interfaceTypeMatch = .any
+//        manager.isOnDemandEnabled = true
+//        manager.onDemandRules = [onDemandRule]
 
         // Enable the manager bu default.
         manager.isEnabled = true

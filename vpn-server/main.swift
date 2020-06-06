@@ -80,8 +80,6 @@ default:
     bindTarget = .ip(host: defaultHost, port: defaultPort)
 }
 
-#warning("TODO: advertise via Bonjour")
-
 let channel = try { () -> Channel in
     switch bindTarget {
     case .ip(let host, let port):
