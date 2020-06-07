@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C189C482479D399000EE6B3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C189C432479D280000EE6B3 /* main.swift */; };
 		0C230CDA24884C35005FEEBD /* libVPNProtocol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CD38AF92486C12E00DB2626 /* libVPNProtocol.a */; };
+		0C34DF93248D50E500FBBD11 /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C34DF92248D50E500FBBD11 /* Cipher.swift */; };
 		0C3C1B5F247039EB00571084 /* VPNConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B5E247039EB00571084 /* VPNConfigurationService.swift */; };
 		0C3C1B6124703B5E00571084 /* TunnelDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */; };
 		0C3C1B6524703D8600571084 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B6424703D8600571084 /* PrimaryButton.swift */; };
@@ -81,6 +82,7 @@
 /* Begin PBXFileReference section */
 		0C189C412479D280000EE6B3 /* vpn-server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "vpn-server"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C189C432479D280000EE6B3 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = main.swift; path = "vpn-server/main.swift"; sourceTree = SOURCE_ROOT; };
+		0C34DF92248D50E500FBBD11 /* Cipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cipher.swift; sourceTree = "<group>"; };
 		0C3C1B5D24702E1C00571084 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0C3C1B5E247039EB00571084 /* VPNConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfigurationService.swift; sourceTree = "<group>"; };
 		0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelDetailsView.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				0CD38AFB2486C12E00DB2626 /* Packet.swift */,
+				0C34DF92248D50E500FBBD11 /* Cipher.swift */,
 			);
 			path = "vpn-protocol";
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C34DF93248D50E500FBBD11 /* Cipher.swift in Sources */,
 				0CD38AFC2486C12E00DB2626 /* Packet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

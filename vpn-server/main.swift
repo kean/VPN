@@ -87,7 +87,7 @@ let channel = try { () -> Channel in
     case .unixDomainSocket(let path):
         return try bootstrap.bind(unixDomainSocketPath: path).wait()
     }
-    }()
+}()
 
 print("Server started and listening on \(channel.localAddress!)")
 

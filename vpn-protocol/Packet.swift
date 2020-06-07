@@ -3,6 +3,7 @@
 // Copyright (c) 2020 Alexander Grebenyuk (github.com/kean).
 
 import Foundation
+import CryptoKit
 
 public enum PacketCode: UInt8 {
     /// A control packet containing client authentication request (JSON).
@@ -29,7 +30,17 @@ public enum PacketParsingError: Error {
     case invalidPacketCode
 }
 
-public struct Packets {
+public struct Header {
+    public let code: PacketCode
+
+    public static let length = 1
+
+    public init(code: PacketCode) {
+        self.code = code
+    }
+}
+
+public enum Body {
     public struct ClientAuthRequest: Codable {
         public let login: String
         public let password: String
@@ -38,25 +49,41 @@ public struct Packets {
             self.login = login
             self.password = password
         }
-
-        public func datagram() throws -> Data {
-            var data = Data()
-            data.append(PacketCode.clientAuthRequest.rawValue)
-            let json = try JSONEncoder().encode(self)
-            data.append(json)
-            return data
-        }
     }
 
     public struct ServerAuthResponse: Codable {
         public let isOK: Bool
         public let address: String
-
-        public init(datagram: Data) throws {
-            #warning("TODO: implement")
-            fatalError()
-        }
     }
 
     public typealias Data = Foundation.Data
+}
+
+// MARK: - Encoder
+
+public enum MessageEncoder {
+    public static func encode<Body: Codable>(header: Header, body: Body, key: SymmetricKey) throws -> Data {
+        try encode(header: header, body: JSONEncoder().encode(body), key: key)
+    }
+
+    public static func encode(header: Header, body: Data, key: SymmetricKey) throws -> Data {
+        var data = Data()
+
+        // Header
+        data.append(header.code.rawValue)
+
+        // Body
+        let body = try Cipher.encrypt(body, key: key)
+        data.append(body)
+
+        return data
+    }
+}
+
+public enum MessageDecoder {
+    /// Decrypts and decodes the body of the given datagram.
+    public static func decode<T: Decodable>(_ type: T.Type, datagram: Data, key: SymmetricKey) throws -> T {
+        let data = try Cipher.decrypt(datagram[Header.length...], key: key)
+        return try JSONDecoder().decode(type, from: data)
+    }
 }

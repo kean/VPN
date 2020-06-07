@@ -5,10 +5,12 @@
 import NetworkExtension
 import os.log
 import VPNProtocol
+import CryptoKit
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
 
-    private var session: NWUDPSession!
+    private var udpSession: NWUDPSession!
+    private var key: SymmetricKey!
     private var observer: AnyObject?
     private let queue = DispatchQueue(label: "test")
     private var pendingCompletion: ((Error?) -> Void)?
@@ -19,6 +21,12 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
         self.pendingCompletion = completionHandler
 
+        /// Get a "pre-shared" symmetric key.
+        /// WARNING: Don't do this in production.
+        self.key = Cipher.key
+
+        self.startUDPSession()
+
         #warning("TODO: complete setup")
 //        let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "192.168.0.14")  
 //        setTunnelNetworkSettings(settings) { error in
@@ -28,8 +36,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
     private func startUDPSession() {
         let endpoint = NWHostEndpoint(hostname: "192.168.0.13", port: "9999")
-        self.session = createUDPSession(to: endpoint, from: nil)
-        self.observer = session.observe(\.state, options: [.new]) { [weak self] session, _ in
+        self.udpSession = createUDPSession(to: endpoint, from: nil)
+        self.observer = udpSession.observe(\.state, options: [.new]) { [weak self] session, _ in
             guard let self = self else { return }
             self.queue.async {
                 self.udpSession(session, didUpdateState: session.state)
@@ -44,12 +52,25 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         guard pendingCompletion != nil else { return }
         switch state {
         case .ready:
-            session.setReadHandler({ (data, error) in
-                print("received: ", data, error)
+            session.setReadHandler({ [weak self] datagrams, error in
+                guard let self = self else { return }
+                self.queue.async {
+                    if let datagrams = datagrams {
+                        for datagram in datagrams {
+                            try? self.didReceiveDatagram(datagram: datagram)
+                        }
+                    } else {
+                        // TODO: Handle error
+                    }
+                }
             }, maxDatagrams: Int.max)
 
             #warning("TODO: pass password via keychain")
-            self.authenticate(login: "kean", password: "123")
+            do {
+                try self.authenticate(login: "kean", password: "123")
+            } catch {
+                os_log(.fault, log: log, "Failed to authenticate")
+            }
         case .failed:
             pendingCompletion?(PacketTunnelError.failedToEstablishConnection)
             pendingCompletion = nil
@@ -62,14 +83,15 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         let code = try PacketCode(datagram: datagram)
         switch code {
         case .serverAuthResponse:
-            let response = try Packets.ServerAuthResponse(datagram: datagram)
+            let response = try MessageDecoder.decode(Body.ServerAuthResponse.self, datagram: datagram, key: key)
             if response.isOK {
                 self.didSetupTunnel(address: response.address)
             }
         case .data:
-            let packet = // Decrypt `datagram`
-            let protocolNumber = IPHeader.protocolNumber(inPacket: packet)
-            self.packetFlow.writePackets([packet], withProtocols: [protocolNumber])
+            #warning("TODO:")
+//            let packet = // Decrypt `datagram`
+//            let protocolNumber = IPHeader.protocolNumber(inPacket: packet)
+//            self.packetFlow.writePackets([packet], withProtocols: [protocolNumber])
         default:
             break
         }
@@ -84,10 +106,14 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         }
     }
 
-    private func authenticate(login: String, password: String) {
-        let packet = Packets.ClientAuthRequest(login: login, password: password)
-        #warning("TODO: handle errors")
-        session!.writeDatagram(try! packet.datagram()) { error in
+    private func authenticate(login: String, password: String) throws {
+        let datagram = try MessageEncoder.encode(
+            header: Header(code: .clientAuthRequest),
+            body: Body.ClientAuthRequest(login: login, password: password),
+            key: key
+        )
+
+        udpSession.writeDatagram(datagram) { error in
             // Handle error
         }
     }
@@ -104,13 +130,14 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
     private func readPackets() {
         packetFlow.readPacketObjects { packets in
-            let datagrams = packets.map {
-                // Encrypt data
-            }
-
-            self.session.writeMultipleDatagrams(datagrams) { error in
-                // Handle errors
-            }
+            #warning("TODO:")
+//            let datagrams = packets.map {
+//                // Encrypt data
+//            }
+//
+//            self.session.writeMultipleDatagrams(datagrams) { error in
+//                // Handle errors
+//            }
 
             self.readPackets()
         }
