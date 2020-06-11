@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C189C482479D399000EE6B3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C189C432479D280000EE6B3 /* main.swift */; };
-		0C230CDA24884C35005FEEBD /* libVPNProtocol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CD38AF92486C12E00DB2626 /* libVPNProtocol.a */; };
+		0C230CDA24884C35005FEEBD /* libBestVPN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CD38AF92486C12E00DB2626 /* libBestVPN.a */; };
 		0C34DF93248D50E500FBBD11 /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C34DF92248D50E500FBBD11 /* Cipher.swift */; };
 		0C3C1B5F247039EB00571084 /* VPNConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B5E247039EB00571084 /* VPNConfigurationService.swift */; };
 		0C3C1B6124703B5E00571084 /* TunnelDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */; };
@@ -23,6 +23,10 @@
 		0C571CBA247050E5006B2931 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C571CB9247050E5006B2931 /* NetworkExtension.framework */; };
 		0C571CBC24705809006B2931 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C571CBB24705809006B2931 /* SplashView.swift */; };
 		0C571CC42470B4D9006B2931 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C571CB9247050E5006B2931 /* NetworkExtension.framework */; };
+		0C5F7022248DA579000297AB /* libBestVPN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CD38AF92486C12E00DB2626 /* libBestVPN.a */; };
+		0CA5FEBD2491B4B400C71D25 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA5FEBC2491B4B400C71D25 /* Keychain.swift */; };
+		0CA5FEBE2491B4B400C71D25 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA5FEBC2491B4B400C71D25 /* Keychain.swift */; };
+		0CA5FEC12491B72E00C71D25 /* TunnelDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA5FEC02491B72E00C71D25 /* TunnelDetailsViewModel.swift */; };
 		0CAE93DD246F4927007B2E95 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */; };
 		0CAE93E2246F4927007B2E95 /* vpn-tunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE940624702557007B2E95 /* WelcomeView.swift */; };
@@ -32,6 +36,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		0C230CDB24884C35005FEEBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0C405BE12466FBFE00EB0786 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0CD38AF82486C12E00DB2626;
+			remoteInfo = "vpn-protocol";
+		};
+		0C5F7023248DA579000297AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0C405BE12466FBFE00EB0786 /* Project object */;
 			proxyType = 1;
@@ -100,12 +111,14 @@
 		0C571CB9247050E5006B2931 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		0C571CBB24705809006B2931 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		0C571CC22470B343006B2931 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		0CA5FEBC2491B4B400C71D25 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		0CA5FEC02491B72E00C71D25 /* TunnelDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelDetailsViewModel.swift; sourceTree = "<group>"; };
 		0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "vpn-tunnel.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CAE93DC246F4927007B2E95 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
 		0CAE93DE246F4927007B2E95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CAE93DF246F4927007B2E95 /* vpn_tunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vpn_tunnel.entitlements; sourceTree = "<group>"; };
 		0CAE940624702557007B2E95 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
-		0CD38AF92486C12E00DB2626 /* libVPNProtocol.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVPNProtocol.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CD38AF92486C12E00DB2626 /* libBestVPN.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBestVPN.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CD38AFB2486C12E00DB2626 /* Packet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Packet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C5F7022248DA579000297AB /* libBestVPN.a in Frameworks */,
 				0CD38B06248735A700DB2626 /* NIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,7 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C230CDA24884C35005FEEBD /* libVPNProtocol.a in Frameworks */,
+				0C230CDA24884C35005FEEBD /* libBestVPN.a in Frameworks */,
 				0C571CC42470B4D9006B2931 /* NetworkExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,23 +167,24 @@
 			path = "vpn-server";
 			sourceTree = "<group>";
 		};
-		0C3C1B662470403600571084 /* Views */ = {
+		0C3C1B662470403600571084 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				0CA5FEBF2491B71F00C71D25 /* TunnelDetails */,
 				0CAE940624702557007B2E95 /* WelcomeView.swift */,
 				0C405BF02466FBFE00EB0786 /* RouterView.swift */,
-				0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */,
 				0C3C1B6424703D8600571084 /* PrimaryButton.swift */,
 				0C3C1B682470404A00571084 /* Spinner.swift */,
 				0C571CBB24705809006B2931 /* SplashView.swift */,
 			);
-			path = Views;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		0C3C1B672470403C00571084 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				0C3C1B5E247039EB00571084 /* VPNConfigurationService.swift */,
+				0CA5FEBC2491B4B400C71D25 /* Keychain.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -193,7 +208,7 @@
 				0C405BE92466FBFE00EB0786 /* vpn-client.app */,
 				0CAE93DA246F4927007B2E95 /* vpn-tunnel.appex */,
 				0C189C412479D280000EE6B3 /* vpn-server */,
-				0CD38AF92486C12E00DB2626 /* libVPNProtocol.a */,
+				0CD38AF92486C12E00DB2626 /* libBestVPN.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -205,7 +220,7 @@
 				0C405BEC2466FBFE00EB0786 /* AppDelegate.swift */,
 				0C405BEE2466FBFE00EB0786 /* SceneDelegate.swift */,
 				0C3C1B672470403C00571084 /* Services */,
-				0C3C1B662470403600571084 /* Views */,
+				0C3C1B662470403600571084 /* Screens */,
 				0C405BF22466FC0000EB0786 /* Assets.xcassets */,
 				0C405BF72466FC0000EB0786 /* LaunchScreen.storyboard */,
 				0C405BFA2466FC0000EB0786 /* Info.plist */,
@@ -229,6 +244,15 @@
 				0C571CB9247050E5006B2931 /* NetworkExtension.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0CA5FEBF2491B71F00C71D25 /* TunnelDetails */ = {
+			isa = PBXGroup;
+			children = (
+				0C3C1B6024703B5E00571084 /* TunnelDetailsView.swift */,
+				0CA5FEC02491B72E00C71D25 /* TunnelDetailsViewModel.swift */,
+			);
+			path = TunnelDetails;
 			sourceTree = "<group>";
 		};
 		0CAE93DB246F4927007B2E95 /* vpn-tunnel */ = {
@@ -264,6 +288,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0C5F7024248DA579000297AB /* PBXTargetDependency */,
 			);
 			name = "vpn-server";
 			packageProductDependencies = (
@@ -324,7 +349,7 @@
 			);
 			name = "vpn-protocol";
 			productName = "vpn-protocol";
-			productReference = 0CD38AF92486C12E00DB2626 /* libVPNProtocol.a */;
+			productReference = 0CD38AF92486C12E00DB2626 /* libBestVPN.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -411,12 +436,14 @@
 				0C405BED2466FBFE00EB0786 /* AppDelegate.swift in Sources */,
 				0C405BEF2466FBFE00EB0786 /* SceneDelegate.swift in Sources */,
 				0C3C1B6124703B5E00571084 /* TunnelDetailsView.swift in Sources */,
+				0CA5FEC12491B72E00C71D25 /* TunnelDetailsViewModel.swift in Sources */,
 				0C3C1B5F247039EB00571084 /* VPNConfigurationService.swift in Sources */,
 				0C405BF12466FBFE00EB0786 /* RouterView.swift in Sources */,
 				0CAE940724702557007B2E95 /* WelcomeView.swift in Sources */,
 				0C3C1B6524703D8600571084 /* PrimaryButton.swift in Sources */,
 				0C3C1B692470404A00571084 /* Spinner.swift in Sources */,
 				0C571CBC24705809006B2931 /* SplashView.swift in Sources */,
+				0CA5FEBD2491B4B400C71D25 /* Keychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +452,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CAE93DD246F4927007B2E95 /* PacketTunnelProvider.swift in Sources */,
+				0CA5FEBE2491B4B400C71D25 /* Keychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +472,11 @@
 			isa = PBXTargetDependency;
 			target = 0CD38AF82486C12E00DB2626 /* vpn-protocol */;
 			targetProxy = 0C230CDB24884C35005FEEBD /* PBXContainerItemProxy */;
+		};
+		0C5F7024248DA579000297AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0CD38AF82486C12E00DB2626 /* vpn-protocol */;
+			targetProxy = 0C5F7023248DA579000297AB /* PBXContainerItemProxy */;
 		};
 		0CAE93E1246F4927007B2E95 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -690,7 +723,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = VPNProtocol;
+				PRODUCT_NAME = BestVPN;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SWIFT_VERSION = 5.0;
@@ -704,7 +737,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = VPNProtocol;
+				PRODUCT_NAME = BestVPN;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SWIFT_VERSION = 5.0;

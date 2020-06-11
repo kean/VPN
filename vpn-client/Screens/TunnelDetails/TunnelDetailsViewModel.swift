@@ -6,78 +6,10 @@ import SwiftUI
 import Combine
 import NetworkExtension
 
-struct TunnelDetailsView: View {
-    @ObservedObject var model: TunnelViewModel
-
-    @State var login = ""
-    @State var password = ""
-
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Credentials")) {
-                    TextField("Login", text: $login)
-                    TextField("Password", text: $login)
-                }
-                Section(header: Text("Status")) {
-                    Toggle(isOn: $model.isEnabled, label: { Text("Enabled") })
-                    if model.isEnabled {
-                        Text("Status: ") + Text(model.status).bold()
-                        if model.isStarted {
-                            Button(action: model.buttonStopTapped) { Text("Stop") }
-                                .foregroundColor(Color.orange)
-                        } else {
-                            Button(action: model.buttonStartTapped) { Text("Start") }
-                                .foregroundColor(Color.blue)
-                        }
-                    }
-                }
-                Section {
-                    ButtonRemoveProfile(model: model)
-                }
-            }
-            .disabled(model.isLoading)
-            .alert(isPresented: $model.isShowingError) {
-                Alert(
-                    title: Text(self.model.errorTitle),
-                    message: Text(self.model.errorMessage),
-                    dismissButton: .cancel()
-                )
-            }
-            .navigationBarItems(trailing:
-                Spinner(isAnimating: $model.isLoading, color: .label, style: .medium)
-            )
-            .navigationBarTitle("VPN Status")
-        }
-    }
-}
-
-private struct ButtonRemoveProfile: View {
-    let model: TunnelViewModel
-
-    @State private var isConfirmationPresented = false
-
-    var body: some View {
-        Button(action: {
-            self.isConfirmationPresented = true
-        }) {
-            Text("Remove Profile")
-        }
-        .foregroundColor(.red)
-        .alert(isPresented: $isConfirmationPresented) {
-            Alert(
-                title: Text("Are you sure you want to remove the profile?"),
-                primaryButton: .destructive(Text("Remove profile"), action: {
-                    self.isConfirmationPresented = false
-                    self.model.buttonRemoveProfileTapped()
-                }),
-                secondaryButton: .cancel()
-            )
-        }
-    }
-}
-
 final class TunnelViewModel: ObservableObject {
+    @Published var username = ""
+    @Published var password = ""
+
     @Published var isEnabled = false
     @Published var isStarted = false
 
@@ -117,23 +49,19 @@ final class TunnelViewModel: ObservableObject {
 
     private func refresh() {
         self.status = tunnel.connection.status.description
+        let username = tunnel.protocolConfiguration?.username ?? ""
+        self.username = username
+        self.password = tunnel.protocolConfiguration?.passwordReference.flatMap {
+            Keychain.password(for: username, reference: $0)
+        } ?? ""
         self.isEnabled = tunnel.isEnabled
         self.isStarted = tunnel.connection.status != .disconnected && tunnel.connection.status != .invalid
     }
 
     private func setEnabled(_ isEnabled: Bool) {
-        tunnel.isEnabled = isEnabled
         guard isEnabled != tunnel.isEnabled else { return }
-        isLoading = true
-        tunnel.saveToPreferences { [weak self] error in
-            guard let self = self else { return }
-            self.isLoading = false
-            if let error = error {
-                self.showError(title: "Failed to \(isEnabled ? "enable" : "disable") VPN", message: error.localizedDescription)
-                self.errorMessage = error.localizedDescription
-                return
-            }
-        }
+        tunnel.isEnabled = isEnabled
+        saveToPreferences()
     }
 
     func buttonStartTapped() {
@@ -167,10 +95,37 @@ final class TunnelViewModel: ObservableObject {
         }
     }
 
+    private func saveToPreferences() {
+        isLoading = true
+        tunnel.saveToPreferences { [weak self] error in
+            guard let self = self else { return }
+            self.isLoading = false
+            if let error = error {
+                self.showError(title: "Failed to update VPN configuration", message: error.localizedDescription)
+                self.errorMessage = error.localizedDescription
+                return
+            }
+        }
+    }
+
     private func showError(title: String, message: String) {
         self.errorTitle = title
         self.errorMessage = message
         self.isShowingError = true
+    }
+
+    func buttonSaveTapped() {
+        let proto = tunnel.protocolConfiguration as! NETunnelProviderProtocol
+        proto.username = self.username
+        proto.passwordReference = {
+            let keychain = Keychain(group: "group.com.github.kean.vpn-client")
+            keychain.set(password: self.password, for: username)
+            return keychain.passwordReference(for: username)
+        }()
+
+        tunnel.protocolConfiguration = proto
+
+        saveToPreferences()
     }
 
     private func sayHelloToTunnel() {
@@ -192,11 +147,5 @@ final class TunnelViewModel: ObservableObject {
         } catch {
             NSLog("Failed to send a message to the provider")
         }
-    }
-}
-
-struct TunnelView_Previews: PreviewProvider {
-    static var previews: some View {
-        TunnelDetailsView(model: .init(tunnel: .init()))
     }
 }

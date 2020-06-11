@@ -66,13 +66,22 @@ final class VPNConfigurationService: ObservableObject {
         manager.localizedDescription = "BestVPN"
 
         let proto = NETunnelProviderProtocol()
-        // TODO: Set the bundle identifier of the Packet Tunnel Provider
-        // App Extension
+
+        // WARNING: This must match the bundle identifier of the app extension
+        // containing packet tunnel provider.
         proto.providerBundleIdentifier = "com.github.kean.vpn-client.vpn-tunnel"
-        // TODO: Set an actual VPN server address, in the sample project
-        // we are going to deploy the service locally.
-        proto.serverAddress = "127.0.0.1:4009"
-        proto.providerConfiguration = ["user":"kean"]
+
+        // WARNING: This must send the actual VPN server address, for the demo
+        // purposes, I'm passing the address of the server in my local network.
+        // The address is going to be different in your network.
+        proto.serverAddress = "192.168.0.13:9999"
+
+        proto.username = "kean"
+        proto.passwordReference = {
+            let keychain = Keychain(group: "group.com.github.kean.vpn-client")
+            keychain.set(password: "123456", for: "kean")
+            return keychain.passwordReference(for: "kean")
+        }()
 
         manager.protocolConfiguration = proto
 

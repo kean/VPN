@@ -4,6 +4,7 @@
 
 import Foundation
 import NIO
+import BestVPN
 
 private final class EchoHandler: ChannelInboundHandler {
     public typealias InboundIn = ByteBuffer

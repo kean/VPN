@@ -4,7 +4,7 @@
 
 import NetworkExtension
 import os.log
-import VPNProtocol
+import BestVPN
 import CryptoKit
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
