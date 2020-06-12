@@ -9,6 +9,7 @@ import NetworkExtension
 final class TunnelViewModel: ObservableObject {
     @Published var username = ""
     @Published var password = ""
+    @Published var server = ""
 
     @Published var isEnabled = false
     @Published var isStarted = false
@@ -54,6 +55,7 @@ final class TunnelViewModel: ObservableObject {
         self.password = tunnel.protocolConfiguration?.passwordReference.flatMap {
             Keychain.password(for: username, reference: $0)
         } ?? ""
+        self.server = tunnel.protocolConfiguration?.serverAddress ?? ""
         self.isEnabled = tunnel.isEnabled
         self.isStarted = tunnel.connection.status != .disconnected && tunnel.connection.status != .invalid
     }
@@ -66,11 +68,7 @@ final class TunnelViewModel: ObservableObject {
 
     func buttonStartTapped() {
         do {
-            try tunnel.connection.startVPNTunnel(options: [:
-                // Don't share with anyone!
-//                NEVPNConnectionStartOptionUsername: "kean",
-//                NEVPNConnectionStartOptionPassword: "password"
-            ] as [String : NSObject])
+            try tunnel.connection.startVPNTunnel(options: [:] as [String : NSObject])
         } catch {
             self.showError(title: "Failed to start VPN tunnel", message: error.localizedDescription)
         }
@@ -122,6 +120,7 @@ final class TunnelViewModel: ObservableObject {
             keychain.set(password: self.password, for: username)
             return keychain.passwordReference(for: username)
         }()
+        proto.serverAddress = server
 
         tunnel.protocolConfiguration = proto
 

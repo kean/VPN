@@ -13,10 +13,10 @@ struct TunnelDetailsView: View {
                 #warning("TODO: save username and password and add server address")
                 #warning("TODO: always show titles")
                 #warning("TODO: actually use username and password in the tunnel")
-                #warning("TODO: disble save button when save not needed")
-                Section(header: Text("Credentials")) {
+                Section(header: Text("Settings")) {
                     TextField("Username", text: $model.username)
                     TextField("Password", text: $model.password)
+                    TextField("Server", text: $model.server)
                     Button(action: model.buttonSaveTapped) { Text("Save") }
                         .foregroundColor(Color.blue)
                 }
