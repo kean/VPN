@@ -10,13 +10,11 @@ struct TunnelDetailsView: View {
     var body: some View {
         NavigationView {
             Form {
-                #warning("TODO: save username and password and add server address")
-                #warning("TODO: always show titles")
                 #warning("TODO: actually use username and password in the tunnel")
                 Section(header: Text("Settings")) {
-                    TextField("Username", text: $model.username)
-                    TextField("Password", text: $model.password)
-                    TextField("Server", text: $model.server)
+                    TextInputView(title: "Username", text: $model.username)
+                    TextInputView(title: "Password", text: $model.password)
+                    TextInputView(title: "Server", text: $model.server)
                     Button(action: model.buttonSaveTapped) { Text("Save") }
                         .foregroundColor(Color.blue)
                 }
@@ -49,6 +47,21 @@ struct TunnelDetailsView: View {
                 Spinner(isAnimating: $model.isLoading, color: .label, style: .medium)
             )
             .navigationBarTitle("VPN Status")
+        }
+    }
+}
+
+private struct TextInputView: View {
+    let title: String
+    let text: Binding<String>
+
+    var body: some View {
+        HStack(alignment: .center) {
+            Text(title)
+                .font(.callout)
+            TextField(title, text: text)
+                .multilineTextAlignment(.trailing)
+                .foregroundColor(Color.gray)
         }
     }
 }
