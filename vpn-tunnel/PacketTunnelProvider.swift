@@ -3,39 +3,56 @@
 // Copyright (c) 2020 Alexander Grebenyuk (github.com/kean).
 
 import NetworkExtension
-import os.log
 import BestVPN
 import CryptoKit
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
 
+    private var configuration: Configuration!
     private var udpSession: NWUDPSession!
     private var key: SymmetricKey!
     private var observer: AnyObject?
-    private let queue = DispatchQueue(label: "test")
+    #warning("TODO: do we need this queue?")
+    private let queue = DispatchQueue(label: "com.github.packet-tunnel-provider")
     private var pendingCompletion: ((Error?) -> Void)?
-    private let log = OSLog(subsystem: "vpn-tunnel", category: "default")
 
     override func startTunnel(options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
-        os_log("Starting tunnel", log: log)
+        do {
+            let proto = protocolConfiguration as! NETunnelProviderProtocol
+            self.configuration = try Configuration(proto: proto)
+        } catch {
+            completionHandler(error)
+        }
 
-        self.pendingCompletion = completionHandler
-
-        /// Get a "pre-shared" symmetric key.
-        /// WARNING: Don't do this in production.
+        // "Get" a pre-shared symmetric key.
+        //
+        // WARNING: Don't do this in production! This code uses the same key
+        // every time for simplicity. In practice, you are going to want to
+        // either pre-share it properly, or implement proper TLS handshake.
         self.key = Cipher.key
 
-        self.startUDPSession()
+        // Remember the completion handler so that we could call it when the
+        // the connection with the server is established.
+        //
+        // When the Packet Tunnel Provider executes the completionHandler block
+        // with a nil error parameter, it signals to the system that it is ready
+        // to begin handling network data. Therefore, the Packet Tunnel Provider
+        // should call `setTunnelNetworkSettings(_:completionHandler:)` and wait
+        // for it to complete before executing the completionHandler block.
+        //
+        // The domain and code of the NSError object passed to the completionHandler
+        // block are defined by the Packet Tunnel Provider (`NEVPNError`).
+        self.pendingCompletion = completionHandler
 
-        #warning("TODO: complete setup")
-//        let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "192.168.0.14")  
-//        setTunnelNetworkSettings(settings) { error in
-//            completionHandler(error)
-//        }
+        self.startTunnel()
+    }
+
+    private func startTunnel() {
+        self.startUDPSession()
     }
 
     private func startUDPSession() {
-        let endpoint = NWHostEndpoint(hostname: "192.168.0.13", port: "9999")
+        let endpoint = NWHostEndpoint(hostname: configuration.hostname, port: configuration.port)
         self.udpSession = createUDPSession(to: endpoint, from: nil)
         self.observer = udpSession.observe(\.state, options: [.new]) { [weak self] session, _ in
             guard let self = self else { return }
@@ -47,8 +64,6 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
     #warning("TODO: pass server address from the app")
     private func udpSession(_ session: NWUDPSession, didUpdateState state: NWUDPSessionState) {
-        os_log("#%{PUBLIC}@ did update state: %{PUBLIC}@", log: log, session, "\(state)")
-
         guard pendingCompletion != nil else { return }
         switch state {
         case .ready:
@@ -60,19 +75,19 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
                             try? self.didReceiveDatagram(datagram: datagram)
                         }
                     } else {
-                        // TODO: Handle error
+                        // TODO: handle error
                     }
                 }
-            }, maxDatagrams: Int.max)
+                }, maxDatagrams: Int.max)
 
             #warning("TODO: pass password via keychain")
             do {
-                try self.authenticate(login: "kean", password: "123")
+                try self.authenticate(username: configuration.username, password: configuration.password)
             } catch {
-                os_log(.fault, log: log, "Failed to authenticate")
+                // TODO: handle errors
             }
         case .failed:
-            pendingCompletion?(PacketTunnelError.failedToEstablishConnection)
+            pendingCompletion?(NEVPNError(.connectionFailed))
             pendingCompletion = nil
         default:
             break
@@ -89,9 +104,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             }
         case .data:
             #warning("TODO:")
-//            let packet = // Decrypt `datagram`
-//            let protocolNumber = IPHeader.protocolNumber(inPacket: packet)
-//            self.packetFlow.writePackets([packet], withProtocols: [protocolNumber])
+            //            let packet = // Decrypt `datagram`
+            //            let protocolNumber = IPHeader.protocolNumber(inPacket: packet)
+        //            self.packetFlow.writePackets([packet], withProtocols: [protocolNumber])
         default:
             break
         }
@@ -106,22 +121,16 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         }
     }
 
-    private func authenticate(login: String, password: String) throws {
+    private func authenticate(username: String, password: String) throws {
         let datagram = try MessageEncoder.encode(
             header: Header(code: .clientAuthRequest),
-            body: Body.ClientAuthRequest(login: login, password: password),
+            body: Body.ClientAuthRequest(login: username, password: password),
             key: key
         )
 
         udpSession.writeDatagram(datagram) { error in
             // Handle error
         }
-    }
-
-    private func startTunnel() throws {
-
-
-        #warning("TODO: read login/password")
     }
 
     private func didStartTunnel() {
@@ -131,13 +140,13 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     private func readPackets() {
         packetFlow.readPacketObjects { packets in
             #warning("TODO:")
-//            let datagrams = packets.map {
-//                // Encrypt data
-//            }
-//
-//            self.session.writeMultipleDatagrams(datagrams) { error in
-//                // Handle errors
-//            }
+            //            let datagrams = packets.map {
+            //                // Encrypt data
+            //            }
+            //
+            //            self.session.writeMultipleDatagrams(datagrams) { error in
+            //                // Handle errors
+            //            }
 
             self.readPackets()
         }
@@ -165,6 +174,34 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 }
 
-private enum PacketTunnelError: Swift.Error {
-    case failedToEstablishConnection
+private struct Configuration {
+    let username: String
+    let password: String
+    let hostname: String
+    let port: String
+
+    init(proto: NETunnelProviderProtocol) throws {
+        guard let fullServerAddress = proto.serverAddress else {
+            throw NEVPNError(.configurationInvalid)
+        }
+        let serverAddressParts = fullServerAddress.split(separator: ":")
+        guard serverAddressParts.count == 2 else {
+            throw NEVPNError(.configurationInvalid)
+        }
+
+        self.hostname = String(serverAddressParts[0])
+        self.port = String(serverAddressParts[1])
+
+        guard let username = proto.username else {
+            throw NEVPNError(.configurationInvalid)
+        }
+        self.username = username
+
+        guard let password = proto.passwordReference.flatMap({
+            Keychain.password(for: username, reference: $0)
+        }) else {
+            throw NEVPNError(.configurationInvalid)
+        }
+        self.password = password
+    }
 }

@@ -10,7 +10,6 @@ struct TunnelDetailsView: View {
     var body: some View {
         NavigationView {
             Form {
-                #warning("TODO: actually use username and password in the tunnel")
                 Section(header: Text("Settings")) {
                     TextInputView(title: "Username", text: $model.username)
                     TextInputView(title: "Password", text: $model.password)
