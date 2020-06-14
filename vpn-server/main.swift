@@ -12,28 +12,24 @@ private final class VPNDatagramHandler: ChannelInboundHandler {
 
     public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
         let inputEnvelope = unwrapInboundIn(data)
-        let inputData = Data(inputEnvelope.data.readableBytesView)
+        let inputData = Data(inputEnvelope.data.readableBytesView) // TODO: this probably isn't optimal
         do {
             let code = try PacketCode(datagram: inputData)
-            print("read: \(code)")
 
             switch code {
             case .clientAuthRequest:
-                #warning("TODO: manage auth")
                 let outputData = try MessageEncoder.encode(
                     header: Header(code: .serverAuthResponse), body: Body.ServerAuthResponse(isOK: true), key: Cipher.key
                 )
 
-                // TODO: this probably isn't optimal
                 var buffer = context.channel.allocator.buffer(capacity: outputData.count)
                 buffer.writeBytes(outputData)
 
-                #warning("TOOD: is address correct?")
                 let outputEnvelope = AddressedEnvelope(remoteAddress: inputEnvelope.remoteAddress, data: buffer)
                 context.write(wrapOutboundOut(outputEnvelope), promise: nil)
 
             case .data:
-                #warning("TODO: handle data")
+                // TODO: Inject packets into a virtual interface
                 break
             default:
                 break

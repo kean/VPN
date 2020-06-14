@@ -142,10 +142,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             }
             self.timeoutTimer?.invalidate()
         case .data:
-            #warning("TODO:")
-            //            let packet = // Decrypt `datagram`
-            //            let protocolNumber = IPHeader.protocolNumber(inPacket: packet)
-        //            self.packetFlow.writePackets([packet], withProtocols: [protocolNumber])
+            let data = try MessageDecoder.decode(Data.self, datagram: datagram, key: key)
+            let proto = protocolNumber(for: data)
+            self.packetFlow.writePackets([data], withProtocols: [proto])
         default:
             break
         }
@@ -162,6 +161,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
             self.pendingCompletion?(error)
             self.pendingCompletion = nil
+
+            self.didStartTunnel()
         }
     }
 
@@ -186,14 +187,20 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
     private func readPackets() {
         packetFlow.readPacketObjects { packets in
-            #warning("TODO:")
-            //            let datagrams = packets.map {
-            //                // Encrypt data
-            //            }
-            //
-            //            self.session.writeMultipleDatagrams(datagrams) { error in
-            //                // Handle errors
-            //            }
+            do {
+                let datagrams = try packets.map {
+                    try MessageEncoder.encode(
+                        header: Header(code: .data),
+                        body: $0.data,
+                        key: key
+                    )
+                }
+                self.session.writeMultipleDatagrams(datagrams) { error in
+                    // TODO: Handle errors
+                }
+            } catch {
+                // TODO: Handle errors
+            }
 
             self.readPackets()
         }
@@ -226,13 +233,6 @@ private struct Configuration {
     let password: String
     let hostname: String
     let port: String
-
-    init() {
-        self.username = "kean"
-        self.password = "123456"
-        self.hostname = "192.168.0.13"
-        self.port = "9999"
-    }
 
     init(proto: NETunnelProviderProtocol) throws {
         guard let fullServerAddress = proto.serverAddress else {
@@ -272,4 +272,16 @@ extension NWUDPSessionState: CustomStringConvertible {
         @unknown default: return "unknown"
         }
     }
+}
+
+private func protocolNumber(for packet: Data) -> NSNumber {
+    guard !packet.isEmpty else {
+        return AF_INET as NSNumber
+    }
+
+    // 'packet' contains the decrypted incoming IP packet data
+
+    // The first 4 bits identify the IP version
+    let ipVersion = (packet[0] & 0xf0) >> 4
+    return (ipVersion == 6) ? AF_INET6 as NSNumber : AF_INET as NSNumber
 }
