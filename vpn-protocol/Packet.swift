@@ -53,7 +53,10 @@ public enum Body {
 
     public struct ServerAuthResponse: Codable {
         public let isOK: Bool
-        public let address: String
+
+        public init(isOK: Bool) {
+            self.isOK = isOK
+        }
     }
 
     public typealias Data = Foundation.Data

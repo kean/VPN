@@ -6,14 +6,41 @@ import Foundation
 import NIO
 import BestVPN
 
-private final class EchoHandler: ChannelInboundHandler {
-    public typealias InboundIn = ByteBuffer
-    public typealias OutboundOut = ByteBuffer
+private final class VPNDatagramHandler: ChannelInboundHandler {
+    public typealias InboundIn = AddressedEnvelope<ByteBuffer>
+    public typealias OutboundOut = AddressedEnvelope<ByteBuffer>
 
     public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
-        // As we are not really interested getting notified on success or failure we just pass nil as promise to
-        // reduce allocations.
-        context.write(data, promise: nil)
+        let inputEnvelope = unwrapInboundIn(data)
+        let inputData = Data(inputEnvelope.data.readableBytesView)
+        do {
+            let code = try PacketCode(datagram: inputData)
+            print("read: \(code)")
+
+            switch code {
+            case .clientAuthRequest:
+                #warning("TODO: manage auth")
+                let outputData = try MessageEncoder.encode(
+                    header: Header(code: .serverAuthResponse), body: Body.ServerAuthResponse(isOK: true), key: Cipher.key
+                )
+
+                // TODO: this probably isn't optimal
+                var buffer = context.channel.allocator.buffer(capacity: outputData.count)
+                buffer.writeBytes(outputData)
+
+                #warning("TOOD: is address correct?")
+                let outputEnvelope = AddressedEnvelope(remoteAddress: inputEnvelope.remoteAddress, data: buffer)
+                context.write(wrapOutboundOut(outputEnvelope), promise: nil)
+
+            case .data:
+                #warning("TODO: handle data")
+                break
+            default:
+                break
+            }
+        } catch {
+            // TODO: Handle errors
+        }
     }
 
     public func channelReadComplete(context: ChannelHandlerContext) {
@@ -40,7 +67,7 @@ var bootstrap = DatagramBootstrap(group: group)
     // Set the handlers that are applied to the bound channel
     .channelInitializer { channel in
         // Ensure we don't read faster than we can write by adding the BackPressureHandler into the pipeline.
-        channel.pipeline.addHandler(EchoHandler())
+        channel.pipeline.addHandler(VPNDatagramHandler())
     }
 
 defer {

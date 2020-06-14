@@ -5,6 +5,7 @@
 import NetworkExtension
 import BestVPN
 import CryptoKit
+import os.log
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
 
@@ -14,15 +15,24 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     private var observer: AnyObject?
     #warning("TODO: do we need this queue?")
     private let queue = DispatchQueue(label: "com.github.packet-tunnel-provider")
+    private let log = OSLog(subsystem: "vpn-tunnel-ptp", category: "default")
     private var pendingCompletion: ((Error?) -> Void)?
+    private weak var timeoutTimer: Timer?
 
     override func startTunnel(options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
+        os_log(.default, log: log, "Starting tunnel, options: %{PRIVATE}@", "\(String(describing: options))")
+
         do {
-            let proto = protocolConfiguration as! NETunnelProviderProtocol
+            guard let proto = protocolConfiguration as? NETunnelProviderProtocol else {
+                throw NEVPNError(.configurationInvalid)
+            }
             self.configuration = try Configuration(proto: proto)
         } catch {
+            os_log(.error, log: log, "Failed to read the configuration", error.localizedDescription)
             completionHandler(error)
         }
+
+        os_log(.default, log: log, "Read configuration %{PRIVATE}@", "\(String(describing: configuration))")
 
         // "Get" a pre-shared symmetric key.
         //
@@ -52,41 +62,39 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 
     private func startUDPSession() {
+        os_log(.default, log: log, "Starting UDP session, hostname: %{PUBLIC}@, port: %{PUBLIC}@", configuration.hostname, configuration.port)
+
         let endpoint = NWHostEndpoint(hostname: configuration.hostname, port: configuration.port)
         self.udpSession = createUDPSession(to: endpoint, from: nil)
         self.observer = udpSession.observe(\.state, options: [.new]) { [weak self] session, _ in
             guard let self = self else { return }
+            os_log(.default, log: self.log, "Session did update state: %{PUBLIC}@", session.state.description)
             self.queue.async {
                 self.udpSession(session, didUpdateState: session.state)
             }
         }
     }
 
-    #warning("TODO: pass server address from the app")
     private func udpSession(_ session: NWUDPSession, didUpdateState state: NWUDPSessionState) {
-        guard pendingCompletion != nil else { return }
         switch state {
         case .ready:
+            guard pendingCompletion != nil else { return }
+
             session.setReadHandler({ [weak self] datagrams, error in
                 guard let self = self else { return }
                 self.queue.async {
-                    if let datagrams = datagrams {
-                        for datagram in datagrams {
-                            try? self.didReceiveDatagram(datagram: datagram)
-                        }
-                    } else {
-                        // TODO: handle error
-                    }
+                    self.didReceiveDatagrams(datagrams: datagrams ?? [], error: error)
                 }
-                }, maxDatagrams: Int.max)
+            }, maxDatagrams: Int.max)
 
-            #warning("TODO: pass password via keychain")
             do {
                 try self.authenticate(username: configuration.username, password: configuration.password)
             } catch {
                 // TODO: handle errors
+                os_log(.default, log: self.log, "Did fail to authenticate: %{PUBLIC}@", "\(error)")
             }
         case .failed:
+            guard pendingCompletion != nil else { return }
             pendingCompletion?(NEVPNError(.connectionFailed))
             pendingCompletion = nil
         default:
@@ -94,13 +102,34 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         }
     }
 
+    private func didReceiveDatagrams(datagrams: [Data], error: Error?) {
+        for datagram in datagrams {
+            do {
+                try self.didReceiveDatagram(datagram: datagram)
+            } catch {
+                // TODO: handle error
+                os_log(.default, log: self.log, "UDP session read handler error: %{PUBLIC}@", "\(error)")
+            }
+        }
+        if let error = error {
+            // TODO: handle error
+            os_log(.default, log: self.log, "UDP session read handler error: %{PUBLIC}@", "\(error)")
+        }
+    }
+
     private func didReceiveDatagram(datagram: Data) throws {
         let code = try PacketCode(datagram: datagram)
+
+        os_log(.default, log: self.log, "Did receive datagram with code: %{PUBLIC}@", "\(code)")
+
         switch code {
         case .serverAuthResponse:
             let response = try MessageDecoder.decode(Body.ServerAuthResponse.self, datagram: datagram, key: key)
+            os_log(.default, log: self.log, "Did receive auth response: %{PRIVATE}@", "\(response)")
             if response.isOK {
-                self.didSetupTunnel(address: response.address)
+                // TODO: In reality, you would pass a resolved IP address, in our
+                // case we already provide an IP address in the configurtaion
+                self.didSetupTunnel(address: configuration.hostname)
             }
         case .data:
             #warning("TODO:")
@@ -113,10 +142,15 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 
     private func didSetupTunnel(address: String) {
+        os_log(.default, log: self.log, "Did setup tunnel with address: %{PUBLIC}@", "\(address)")
+
         let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: address)
         // Configure DNS/split-tunnel/etc settings if needed
+
         setTunnelNetworkSettings(settings) { error in
-            self.pendingCompletion?(nil)
+            os_log(.default, log: self.log, "Did setup tunnel settings: %{PUBLIC}@, error: %{PUBLIC}@", "\(settings)", "\(error)")
+
+            self.pendingCompletion?(error)
             self.pendingCompletion = nil
         }
     }
@@ -180,6 +214,13 @@ private struct Configuration {
     let hostname: String
     let port: String
 
+    init() {
+        self.username = "kean"
+        self.password = "123456"
+        self.hostname = "192.168.0.13"
+        self.port = "9999"
+    }
+
     init(proto: NETunnelProviderProtocol) throws {
         guard let fullServerAddress = proto.serverAddress else {
             throw NEVPNError(.configurationInvalid)
@@ -203,5 +244,19 @@ private struct Configuration {
             throw NEVPNError(.configurationInvalid)
         }
         self.password = password
+    }
+}
+
+extension NWUDPSessionState: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .cancelled: return ".cancelled"
+        case .failed: return ".failed"
+        case .invalid: return ".invalid"
+        case .preparing: return ".preparing"
+        case .ready: return ".ready"
+        case .waiting: return ".waiting"
+        @unknown default: return "unknown"
+        }
     }
 }
