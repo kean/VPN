@@ -155,10 +155,10 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         os_log(.default, log: self.log, "Did setup tunnel with address: %{public}@", "\(address)")
 
         let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: address)
-        // Configure DNS/split-tunnel/etc settings if needed
+        // TODO: Configure DNS/split-tunnel/etc settings if needed
 
         setTunnelNetworkSettings(settings) { error in
-            os_log(.default, log: self.log, "Did setup tunnel settings: %{public}@, error: %{public}@", "\(settings)", "\(error)")
+            os_log(.default, log: self.log, "Did setup tunnel settings: %{public}@, error: %{public}@", "\(settings)", "\(String(describing: error))")
 
             self.pendingCompletion?(error)
             self.pendingCompletion = nil
@@ -173,7 +173,10 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         )
 
         udpSession.writeDatagram(datagram) { error in
-            // Handle error
+            if let error = error {
+                // TODO: Handle errors
+                os_log(.default, log: self.log, "Failed to write auth request datagram, error: %{public}@", "\(error)")
+            }
         }
     }
 
