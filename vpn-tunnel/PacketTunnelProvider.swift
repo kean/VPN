@@ -20,7 +20,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     private weak var timeoutTimer: Timer?
 
     override func startTunnel(options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
-        os_log(.default, log: log, "Starting tunnel, options: %{PRIVATE}@", "\(String(describing: options))")
+        os_log(.default, log: log, "Starting tunnel, options: %{private}@", "\(String(describing: options))")
 
         do {
             guard let proto = protocolConfiguration as? NETunnelProviderProtocol else {
@@ -32,7 +32,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
             completionHandler(error)
         }
 
-        os_log(.default, log: log, "Read configuration %{PRIVATE}@", "\(String(describing: configuration))")
+        os_log(.default, log: log, "Read configuration %{private}@", "\(String(describing: configuration))")
 
         // "Get" a pre-shared symmetric key.
         //
@@ -59,16 +59,23 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
     private func startTunnel() {
         self.startUDPSession()
+
+        self.timeoutTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+
+            self.pendingCompletion?(NEVPNError(.connectionFailed))
+            self.pendingCompletion = nil
+        }
     }
 
     private func startUDPSession() {
-        os_log(.default, log: log, "Starting UDP session, hostname: %{PUBLIC}@, port: %{PUBLIC}@", configuration.hostname, configuration.port)
+        os_log(.default, log: log, "Starting UDP session, hostname: %{public}@, port: %{public}@", configuration.hostname, configuration.port)
 
         let endpoint = NWHostEndpoint(hostname: configuration.hostname, port: configuration.port)
         self.udpSession = createUDPSession(to: endpoint, from: nil)
         self.observer = udpSession.observe(\.state, options: [.new]) { [weak self] session, _ in
             guard let self = self else { return }
-            os_log(.default, log: self.log, "Session did update state: %{PUBLIC}@", session.state.description)
+            os_log(.default, log: self.log, "Session did update state: %{public}@", session.state.description)
             self.queue.async {
                 self.udpSession(session, didUpdateState: session.state)
             }
@@ -91,7 +98,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
                 try self.authenticate(username: configuration.username, password: configuration.password)
             } catch {
                 // TODO: handle errors
-                os_log(.default, log: self.log, "Did fail to authenticate: %{PUBLIC}@", "\(error)")
+                os_log(.default, log: self.log, "Did fail to authenticate: %{public}@", "\(error)")
             }
         case .failed:
             guard pendingCompletion != nil else { return }
@@ -108,29 +115,32 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
                 try self.didReceiveDatagram(datagram: datagram)
             } catch {
                 // TODO: handle error
-                os_log(.default, log: self.log, "UDP session read handler error: %{PUBLIC}@", "\(error)")
+                os_log(.default, log: self.log, "UDP session read handler error: %{public}@", "\(error)")
             }
         }
         if let error = error {
             // TODO: handle error
-            os_log(.default, log: self.log, "UDP session read handler error: %{PUBLIC}@", "\(error)")
+            os_log(.default, log: self.log, "UDP session read handler error: %{public}@", "\(error)")
         }
     }
 
     private func didReceiveDatagram(datagram: Data) throws {
         let code = try PacketCode(datagram: datagram)
 
-        os_log(.default, log: self.log, "Did receive datagram with code: %{PUBLIC}@", "\(code)")
+        os_log(.default, log: self.log, "Did receive datagram with code: %{public}@", "\(code)")
 
         switch code {
         case .serverAuthResponse:
             let response = try MessageDecoder.decode(Body.ServerAuthResponse.self, datagram: datagram, key: key)
-            os_log(.default, log: self.log, "Did receive auth response: %{PRIVATE}@", "\(response)")
+            os_log(.default, log: self.log, "Did receive auth response: %{private}@", "\(response)")
             if response.isOK {
                 // TODO: In reality, you would pass a resolved IP address, in our
                 // case we already provide an IP address in the configurtaion
                 self.didSetupTunnel(address: configuration.hostname)
+            } else {
+                // TODO: Handle error
             }
+            self.timeoutTimer?.invalidate()
         case .data:
             #warning("TODO:")
             //            let packet = // Decrypt `datagram`
@@ -142,13 +152,13 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 
     private func didSetupTunnel(address: String) {
-        os_log(.default, log: self.log, "Did setup tunnel with address: %{PUBLIC}@", "\(address)")
+        os_log(.default, log: self.log, "Did setup tunnel with address: %{public}@", "\(address)")
 
         let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: address)
         // Configure DNS/split-tunnel/etc settings if needed
 
         setTunnelNetworkSettings(settings) { error in
-            os_log(.default, log: self.log, "Did setup tunnel settings: %{PUBLIC}@, error: %{PUBLIC}@", "\(settings)", "\(error)")
+            os_log(.default, log: self.log, "Did setup tunnel settings: %{public}@, error: %{public}@", "\(settings)", "\(error)")
 
             self.pendingCompletion?(error)
             self.pendingCompletion = nil
